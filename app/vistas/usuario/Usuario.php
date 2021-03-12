@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="<?php echo RUTA_URL; ?>public/dist/css/skins/_all-skins.min.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="<?php echo RUTA_URL; ?>public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-    <link rel="chortcut icon" type="image/png" href="<?php echo RUTA_URL; ?>public/img/LogoCangry_icon.png" />
+    <link rel="chortcut icon" type="image/png" href="<?php echo RUTA_URL; ?>public/img/LogoLcpreescolar_icon.png" />
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -64,12 +64,12 @@
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label>Apellido Paterno*</label>
+                                <label>Apellido paterno*</label>
                                 <input type="text" class="form-control" id="txtApellidoPaterno" name="txtApellidoPaterno" onkeyup='javascript:this.value=this.value.toUpperCase();'>
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label>Apellido Materno*</label>
+                                <label>Apellido materno*</label>
                                 <input type="text" class="form-control" id="txtApellidoMaterno" name="txtApellidoMaterno" onkeyup='javascript:this.value=this.value.toUpperCase();'>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                         <div class="form-group">
 
                             <div class="form-group col-md-4">
-                                <label>Sucursal*</label>
+                                <label>Escuela*</label>
                                 <select class="form-control" id="cmbSucursal" name="cmbSucursal">
                                 </select>
                             </div>

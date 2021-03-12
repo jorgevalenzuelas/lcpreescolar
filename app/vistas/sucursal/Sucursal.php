@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?php echo NOMBRE_SITIO; ?> | Sucursales</title>
+    <title><?php echo NOMBRE_SITIO; ?> | Escuelas</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="<?php echo RUTA_URL; ?>public/dist/css/skins/_all-skins.min.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="<?php echo RUTA_URL; ?>public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-    <link rel="chortcut icon" type="image/png" href="<?php echo RUTA_URL; ?>public/img/LogoCangry_icon.png" />
+    <link rel="chortcut icon" type="image/png" href="<?php echo RUTA_URL; ?>public/img/LogoLcpreescolar_icon.png" />
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -45,7 +45,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Sucursales
+                Escuelas
             </h1>
 
         </section>
@@ -55,7 +55,7 @@
 
             <div id="msgAlert"></div>
 
-            <button class="btn btn-primary" id="btnMostraFormSucursal">Nueva sucursal</button>
+            <button class="btn btn-primary" id="btnMostraFormSucursal">Nueva escuela</button>
       
             <div class="box" style="margin-top: 20px;">
                 <!-- /.box-header -->

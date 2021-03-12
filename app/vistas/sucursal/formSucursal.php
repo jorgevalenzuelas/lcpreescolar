@@ -9,7 +9,7 @@
         <div class="row">
 
             <div class="form-group col-md-6">
-                <label>Nombre de Sucursal*</label>
+                <label>Nombre de la escuela*</label>
                 <input type="text" class="form-control" id="txtNombreSucursal" name="txtNombreSucursal" onkeyup='javascript:this.value=this.value.toUpperCase();'>
             </div>
 
@@ -40,8 +40,8 @@
                 <label>Tipo*</label>
                 <select class="form-control" id="cmbTipo" name="cmbTipo">
                     <option value="-1">- SELECCIONAR -</option>
-                    <option value="1">SUCURSAL</option>
-                    <option value="2">ALMACÉN</option>
+                    <option value="1">MATUTINA</option>
+                    <option value="2">TIEMPO COMPLETO</option>
                 </select>
             </div>
 
