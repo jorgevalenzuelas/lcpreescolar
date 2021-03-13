@@ -78,6 +78,12 @@ else
 							     );
 
 				$datosPerfil[1] = array (
+									chk2_modulo              => $_POST["chk2_modulo"],
+									chk2_submodulo              => $_POST["chk2_submodulo"],
+									chk2_alumno              => $_POST["chk2_alumno"],
+									chk2_grado              => $_POST["chk2_grado"],
+									chk2_medida              => $_POST["chk2_medida"],
+									chk2_aprendizaje              => $_POST["chk2_aprendizaje"],
 									chk2_usuario              => $_POST["chk2_usuario"],
 									chk2_perfil               => $_POST["chk2_perfil"],
 									chk2_sucursal             => $_POST["chk2_sucursal"],

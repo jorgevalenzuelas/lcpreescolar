@@ -6,9 +6,9 @@
             <img src="<?php echo RUTA_URL; ?>public/img/LogoLcpreescolar.png" class="brand-image img-circle elevation-3" width="50" height="50">
         </span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg" style="font-size: 16px;">
+        <span class="logo-lg" style="font-size: 11px;">
             <img src="<?php echo RUTA_URL; ?>public/img/LogoLcpreescolar.png" class="brand-image img-circle elevation-3" width="50" height="50">
-            Pizza Los Cangry
+            DESORESBIPREESCOLAR
         </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
