@@ -51,31 +51,49 @@
         <section class="content">
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label>MODULO*</label>
+                    <label>Modulo*</label>
                     <select id="cmbModuloAprendizaje" name="cmbModuloAprendizaje" onchange="cargarSubmodulo(0)" class="form-control ns_"></select>
                 </div>
                 <div class="form-group col-md-4">
-                    <label>SUBMODULO*</label>
+                    <label>Submodulo*</label>
                     <select id="cmbSubmoduloAprendizaje" name="cmbSubmoduloAprendizaje" onchange="cargarAprendizaje(this.value)" class="form-control ns_">
                         <option value="-1">-- Selecciona --</option>
                     </select>
                 </div> 
                 <div class="form-group col-md-4">
-                    <label>APRENDIZAJES*</label>
+                    <label>Apredizajes*</label>
                     <datalist id="cmbAprendizajesListMod">
                         <!--option value="0" selected="selected"> -- Seleccione -- </option-->
                     </datalist>
                     <input list="cmbAprendizajesListMod" id="cmbAprendizaje" name="cmbAprendizaje" type="text" class="form-control" placeholder=" -- Escriba -- " onkeyup="javascript:this.value=this.value.toUpperCase();" onchange="MostrarAprendizaje();">
                 </div>                   
             </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label>Grado*</label>
+                    <select id="cmbGrado" name="cmbGrado" onchange="cargarAlumno(0)" class="form-control ns_">
+                        <option value="-1">-- Selecciona --</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Alumno*</label>
+                    <select id="cmbAlumno" name="cmbAlumno" onchange="mostrarAlumno()" class="form-control ns_">
+                        <option value="-1">-- Selecciona --</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Folio: &nbsp;</label><label id="txtFolioVenta"></label>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="GenerarFolio()" id="txtbtnNuevaVenta">Nuevo registro</button>
             <hr>
-
+            <h4 id="textoAlumno"></h4>
+            <h4 id="textoGrado"></h4>
             <h4 id="textoAprendizaje"></h4>
-
             <div id="cblist">
                 
             </div>
-                <div class="form-group col-md-8">
+            <div class="form-group col-md-8">
                 <div class="row pull-right">
                     <button type="submit" class="btn btn-primary" class="btn btn-primary" id="btnGuardar">Guardar</button>
                 </div>
@@ -130,6 +148,60 @@
 
     $(document).ready(function () {
         cargarModulo();
+        cargaGrado();
+    });
+
+    function GenerarFolio(){
+        
+        
+            $.ajax({
+                url      : 'Registro/generarFolio',
+                type     : "POST",
+                data    : { 
+                    ban: 1,
+                    folo_venta: ''
+                },
+                success  : function(datos) {
+
+                    var myJson = JSON.parse(datos);
+
+                    
+                        $("#txtFolioVenta").text(myJson.arrayDatos[0].folio_folio);
+                        
+                  
+                }
+            });
+    }
+
+    $('#btnGuardar').click(function (e) {
+        var favorite = [];
+            $.each($("input[name='group1']:checked"), function(){
+                favorite.push(this.id);
+            });
+
+            var val = $('#cmbAprendizaje').val() ? $('#cmbAprendizaje').val() : '';
+            // se agrego indexOf para saber si el string val viene con comillas o apostrofe y formar bien la cadena
+            if(val.indexOf("\"") !== -1){
+                var valueCombo = $("#cmbAprendizajesListMod").find("option[value='"+val+"']").data("value") ? $("#cmbAprendizajesListMod").find("option[value='"+val+"']").data("value") : "";
+            }
+            else{
+            var valueCombo = $("#cmbAprendizajesListMod").find("option[value=\""+val+"\"]").data("value") ? $("#cmbAprendizajesListMod").find("option[value=\""+val+"\"]").data("value") : "";
+            }
+        $.ajax({
+            url      : 'Registro/guardarRegistro',
+            type     : "POST",
+            data    : { 
+                ban: 1,
+                folio_folio: $("#txtFolioVenta").text(),
+                cve_alumno: $('#cmbAlumno').val(),
+                cve_aprendizaje: valueCombo.cve_aprendizaje,
+                cve_medida: favorite.join(", ")
+            },
+            success  : function(datos) {
+                
+            }
+        });
+        return false;
     });
     
     function cargarModulo(){
@@ -269,6 +341,7 @@
                 $( "#textoAprendizaje" ).addClass( "fa fa-star" );
                 $('#cblist').empty();
                 cargarMedida();
+                
             }
     }
 
@@ -286,7 +359,7 @@
                     $(myJson.arrayDatos).each( function(key, val)
                     {
                         var container = $('#cblist');
-                        $('<input />', { type: 'checkbox', name: 'group1', id: 'cb'+val.cve_medida, value: val.nombre_medida, onclick: "onlyOne(this)" }).appendTo(container);
+                        $('<input />', { type: 'checkbox', name: 'group1', id: val.cve_medida, value: val.nombre_medida, onclick: "onlyOne(this)" }).appendTo(container);
                         $('<label />', { 'for': 'cb'+val.cve_medida, text: val.nombre_medida }).appendTo(container);
                         $('<h3 />').appendTo(container);
 
@@ -298,11 +371,85 @@
     }
     
     function onlyOne(checkbox) {
-    var checkboxes = document.getElementsByName('group1')
-    checkboxes.forEach((item) => {
-        if (item !== checkbox) item.checked = false
-    })
-}
+        var checkboxes = document.getElementsByName('group1')
+        checkboxes.forEach((item) => {
+            if (item !== checkbox) item.checked = false
+        })
+    }
+
+    function cargaGrado(){
+        $.ajax({
+            url      : 'Grado/consultar',
+            type     : "POST",
+            data    : { 
+                ban: 3
+            },
+            beforeSend: function() {
+                // setting a timeout
+
+            },
+            success  : function(datos) {
+
+                var myJson = JSON.parse(datos);
+
+                select = $("#cmbGrado");
+                select.attr('disabled',false);
+                select.find('option').remove();
+                select.append('<option value="-1">-- Selecciona --</option>');
+
+                if(myJson.arrayDatos.length > 0)
+                {
+                    $(myJson.arrayDatos).each( function(key, val)
+                    {
+                        select.append('<option value="' + val.cve_grado + '">' + val.nombre_grado + '</option>');
+                    })
+                    
+                }
+
+            }
+        });
+    }
+
+    function cargarAlumno(){
+        $.ajax({
+            url      : 'Alumno/consultar',
+            type     : "POST",
+            data    : { 
+                ban: 4,
+                cve_alumno: $('#cmbGrado').val()
+            },
+            beforeSend: function() {
+                // setting a timeout
+
+            },
+            success  : function(datos) {
+
+                var myJson = JSON.parse(datos);
+
+                select = $("#cmbAlumno");
+                select.attr('disabled',false);
+                select.find('option').remove();
+                select.append('<option value="-1">-- Selecciona --</option>');
+
+                if(myJson.arrayDatos.length > 0)
+                {
+                    $(myJson.arrayDatos).each( function(key, val)
+                    {
+                        select.append('<option value="' + val.cve_alumno + '">' + val.nombre_alumno +" "+ val.apep_alumno+" "+ val.apem_alumno + '</option>');
+                    });
+                    
+                }
+
+                $("#textoAlumno").text('');
+                $("#textoGrado").text('');
+            }
+        });
+    }
+
+    function mostrarAlumno(){
+        $("#textoAlumno").text('Nombre alumno: '+$("#cmbAlumno option:selected").text());
+        $("#textoGrado").text('Grado: '+$("#cmbGrado option:selected").text());
+    }
     
 </script>
 

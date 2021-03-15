@@ -30,13 +30,19 @@ class RegistroModelo
         $datosFiltrados = $this->filtrarDatos($datosRegistro);
 
         $ban                = $datosFiltrados['ban'];
-        $cve_registro    = $datosFiltrados['cve_registro'];
-        $nombre_registro = $datosFiltrados['nombre_registro'];
+        $cve_registro = (!empty($datosFiltrados['cve_registro']) || $datosFiltrados['cve_registro']!=null) ? $datosFiltrados['cve_registro'] : '0';
+        $folio_folio    = $datosFiltrados['folio_folio'];
+        $cve_alumno    = $datosFiltrados['cve_alumno'];
+        $cve_aprendizaje = $datosFiltrados['cve_aprendizaje'];
+        $cve_medida = $datosFiltrados['cve_medida'];
         $cve_usuario = $_SESSION["cve_usuario"];
         $query = "CALL guardarRegistro(
                                             '$ban',
                                             '$cve_registro',
-                                            '$nombre_registro',
+                                            '$folio_folio',
+                                            '$cve_alumno',
+                                            '$cve_aprendizaje',
+                                            '$cve_medida',
                                             '$cve_usuario'
                                         )";
 
@@ -46,6 +52,27 @@ class RegistroModelo
         
         return $respuesta;
 
+    }
+
+    public function generarFolio($datosFolio)
+    {
+
+        $datosFiltrados = $this->filtrarDatos($datosFolio);
+
+        $ban                = $datosFiltrados['ban'];
+        $folo_venta    = $datosFiltrados['folo_venta'];
+        $cveusuario_accion  = $datosFiltrados['cveusuario_accion'];
+
+        $query = "CALL generarFolio(
+                                            '$ban',
+                                            '$folo_venta',
+                                            '$cveusuario_accion'
+                                        )";
+
+        $c_folio = $this->conexion->query($query);
+        $r_folio = $this->conexion->consulta_array($c_folio);
+
+        return $r_folio;
     }
 
     public function bloquearRegistro($datosRegistro)
