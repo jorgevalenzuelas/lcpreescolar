@@ -113,7 +113,7 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label>MODULO*</label>
-                        <select id="cmbModuloAprendizaje" name="cmbModuloAprendizaje" onchange="cargarSubmodulo()" class="form-control ns_"></select>
+                        <select id="cmbModuloAprendizaje" name="cmbModuloAprendizaje" onchange="cargarSubmodulo(0)" class="form-control ns_"></select>
                     </div>
                     <div class="form-group col-md-4">
                         <label>SUBMODULO*</label>
@@ -320,7 +320,7 @@
         });
     }
 
-    function cargarSubmodulo(){
+    function cargarSubmodulo(valor){
         $.ajax({
             url      : 'Submodulo/consultar',
             type     : "POST",
@@ -346,7 +346,14 @@
                     $(myJson.arrayDatos).each( function(key, val)
                     {
                         select.append('<option value="' + val.cve_submodulo + '">' + val.nombre_submodulo + '</option>');
-                    })
+                    });
+                    if(valor == 0){
+                        document.getElementById("cmbSubmoduloAprendizaje").selectedIndex = "0";
+                    }
+                    else{
+                        $("#cmbSubmoduloAprendizaje").val(valor).change();
+                    }
+                    
 
                 }
 
@@ -439,8 +446,9 @@
                 });
                 $('#txtcveAprendizaje').val(myJson.arrayDatos[0].cve_aprendizaje );
                 $('#txtNombreAprendizaje').val(myJson.arrayDatos[0].nombre_aprendizaje );
-                $("#cmbModuloAprendizaje").val(myJson.arrayDatos[0].cvemodulo_aprendizaje).change();
-                $("#cmbSubmoduloAprendizaje").val(myJson.arrayDatos[0].cvesubmodulo_aprendizaje).change();
+                $("#cmbModuloAprendizaje").val(myJson.arrayDatos[0].cvemodulo_submodulo);
+                cargarSubmodulo(myJson.arrayDatos[0].cvesubmodulo_aprendizaje);
+                
                 $("#btnGuardar").html('Actualizar aprendizaje');
 
             }
