@@ -71,6 +71,15 @@
             <hr>
 
             <h4 id="textoAprendizaje"></h4>
+
+            <div id="cblist">
+                
+            </div>
+                <div class="form-group col-md-8">
+                <div class="row pull-right">
+                    <button type="submit" class="btn btn-primary" class="btn btn-primary" id="btnGuardar">Guardar</button>
+                </div>
+            </div>
         
             <!-- /.box -->
         </section>
@@ -149,7 +158,10 @@
                     {
                         select.append('<option value="' + val.cve_modulo + '">' + val.nombre_modulo + '</option>');
                     })
-
+                    $("#textoAprendizaje").text('');
+                    $( "#textoAprendizaje" ).removeClass( "fa fa-star" );
+                    $('#cblist').empty();
+                    $("#cmbAprendizaje").val('');
                 }
 
             }
@@ -189,7 +201,10 @@
                     else{
                         $("#cmbSubmoduloAprendizaje").val(valor).change();
                     }
-                    
+                    $("#textoAprendizaje").text('');
+                    $( "#textoAprendizaje" ).removeClass( "fa fa-star" );
+                    $('#cblist').empty();
+                    $("#cmbAprendizaje").val('');
 
                 }
 
@@ -227,7 +242,12 @@
                             value = '{"cve_aprendizaje":"'+val.cve_aprendizaje+'","nombre_aprendizaje":"'+val.nombre_aprendizaje.replace(/"/g, "\\&#x22;").replace(/'/g, "&#x27;")+'"}';
 							select.append("<option data-value='"+value+"' value='"+val.nombre_aprendizaje.replace(/'/g, "&#x27;")+"'>");
                         }
-                    })
+                    });
+                    $("#textoAprendizaje").text('');
+                    $( "#textoAprendizaje" ).removeClass( "fa fa-star" );
+                    $('#cblist').empty();
+                    $("#cmbAprendizaje").val('');
+                    
 
                 }
 
@@ -246,9 +266,44 @@
             }
             if(valueCombo.cve_aprendizaje != null){
                 $("#textoAprendizaje").text(valueCombo.nombre_aprendizaje);
+                $( "#textoAprendizaje" ).addClass( "fa fa-star" );
+                $('#cblist').empty();
+                cargarMedida();
             }
     }
 
+    function cargarMedida(){
+        $.ajax({
+            url      : 'Medida/consultar',
+            type     : "POST",
+            data    : { 
+                ban: 1
+            },
+            success  : function(datos) {
+                var myJson = JSON.parse(datos);
+                if(myJson.arrayDatos.length > 0)
+                {
+                    $(myJson.arrayDatos).each( function(key, val)
+                    {
+                        var container = $('#cblist');
+                        $('<input />', { type: 'checkbox', name: 'group1', id: 'cb'+val.cve_medida, value: val.nombre_medida, onclick: "onlyOne(this)" }).appendTo(container);
+                        $('<label />', { 'for': 'cb'+val.cve_medida, text: val.nombre_medida }).appendTo(container);
+                        $('<h3 />').appendTo(container);
+
+                    });
+                }
+
+            }
+        });
+    }
+    
+    function onlyOne(checkbox) {
+    var checkboxes = document.getElementsByName('group1')
+    checkboxes.forEach((item) => {
+        if (item !== checkbox) item.checked = false
+    })
+}
+    
 </script>
 
 </body>
