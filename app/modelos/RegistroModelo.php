@@ -25,6 +25,36 @@ class RegistroModelo
         return $r_registro;
     }
 
+    public function consultarFolio($datos)
+    {
+        $datosFiltrados = $this->filtrarDatos($datos);
+        $ban  = $datosFiltrados['ban'];
+        $folio_folio = (!empty($datosFiltrados['folio_folio']) || $datosFiltrados['folio_folio']!=null) ? $datosFiltrados['folio_folio'] : '0';
+        $cve_usuario = $_SESSION["cve_usuario"];
+
+        $query = "CALL obtenFolio('$ban','$folio_folio','$cve_usuario')";
+
+        $c_medida = $this->conexion->query($query);
+        $r_medida = $this->conexion->consulta_array($c_medida);
+
+        return $r_medida;
+    }
+
+    public function consultarRegistro($datos)
+    {
+        $datosFiltrados = $this->filtrarDatos($datos);
+        $ban  = $datosFiltrados['ban'];
+        $cve_registro = (!empty($datosFiltrados['cve_registro']) || $datosFiltrados['cve_registro']!=null) ? $datosFiltrados['cve_registro'] : '0';
+        $cve_usuario = $_SESSION["cve_usuario"];
+
+        $query = "CALL obtenRegistro('$ban','$cve_registro','$cve_usuario')";
+
+        $c_medida = $this->conexion->query($query);
+        $r_medida = $this->conexion->consulta_array($c_medida);
+
+        return $r_medida;
+    }
+
     public function guardarRegistro($datosRegistro)
     {
         $datosFiltrados = $this->filtrarDatos($datosRegistro);

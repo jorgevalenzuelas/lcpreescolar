@@ -83,10 +83,18 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label>Folio: &nbsp;</label><label id="txtFolioVenta"></label>
+                    
+                    <button type="button" class="btn btn-success" id="btnMostraModalTradicional">
+                    
+                                                        <span class="glyphicon glyphicon-folder-open"></span>
+                                                    </button>
+                                                    <br>
+                    <label>Número registros: &nbsp;</label><label id="txtNumeroRegistros"></label>
                 </div>
             </div>
             <button type="button" class="btn btn-primary" onclick="GenerarFolio()" id="txtbtnNuevaVenta">Nuevo registro</button>
             <hr>
+            <div id="msgAlert2"></div>
             <h4 id="textoAlumno"></h4>
             <h4 id="textoGrado"></h4>
             <h4 id="textoAprendizaje"></h4>
@@ -98,6 +106,27 @@
                     <button type="submit" class="btn btn-primary" class="btn btn-primary" id="btnGuardar">Guardar</button>
                 </div>
             </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                <br>
+                    <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Nombre alumno</th>
+                                <th>Grado</th>
+                                <th>Aprendizaje</th>
+                                <th>Medida</th>
+                                <th>Fecha alta</th>
+                                <th>Detalle</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        
+                    </table>
+                </div>
+
+            
         
             <!-- /.box -->
         </section>
@@ -111,7 +140,42 @@
 </div>
 <!-- ./wrapper -->
 <!-- modales -->
-
+<div class="modal fade" id="modal_formTradicional" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="myModalLabel">Folios</h2>
+            </div>
+            <div class="modal-body" id="muestra_formTradicional">
+                <input type="hidden" id="txtcveTradicional" name="txtcveTradicional">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div id="msgAlert2"></div>
+                    </div>
+                </div>
+                <div class="row table-resposive">
+                    <div class="form-group col-md-12">
+                        <table width="100%" id="gridDetallePaquete" class="table table-bordered table-striped" style="font-size: 12px;">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Número registros</th>
+                                    <th>Fecha alta</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
+                <button class="btn btn-primary" id="btnCancelar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- jQuery 3 -->
 <script src="<?php echo RUTA_URL; ?>public/jquery/jquery-3.4.1.min.js"></script>
 <!-- <script src="<?php echo RUTA_URL; ?>public/bower_components/jquery/dist/jquery.min.js"></script> -->
@@ -147,9 +211,385 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        tableDetallePaquete = $('#gridDetallePaquete').DataTable( {    
+            "responsive": true,
+            "searching" : true,
+            "paging"    : true,
+            "ordering"  : false,
+            "info"      : true,
+            "bLengthChange": false,
+            "columnDefs": [
+                {"width": "10%","className": "text-center","targets": 3}
+            ],
+
+            "bJQueryUI":true,"oLanguage": {
+                "sEmptyTable":     "No hay datos registrados en la Base de Datos.",
+                "sInfo":           "Mostrando desde _START_ hasta _END_ de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando desde 0 hasta 0 de 0 registros",
+                "sInfoFiltered":   "(filtrado de _MAX_ registros en total)",
+                "sInfoPostFix":    "",
+                "sInfoThousands":  ",",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing":     "Procesando...",
+                "sSearch":         "Buscar:",
+                "sZeroRecords":    "No se encontraron resultados",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": activar para Ordenar Ascendentemente",
+                    "sSortDescending": ": activar para Ordendar Descendentemente"
+                }
+            }
+        });
+
+        tableComanda = $('#gridComanda').DataTable( {    
+            "responsive": true,
+            "searching" : true,
+            "paging"    : true,
+            "ordering"  : false,
+            "info"      : true,
+            "bLengthChange": true,
+            "columnDefs": [
+                {"width": "10%","className": "text-center","targets": 6},
+                {"width": "10%","className": "text-center","targets": 7},
+            ],
+
+            "bJQueryUI":true,"oLanguage": {
+                "sEmptyTable":     "No hay datos registrados en la Base de Datos.",
+                "sInfo":           "Mostrando desde _START_ hasta _END_ de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando desde 0 hasta 0 de 0 registros",
+                "sInfoFiltered":   "(filtrado de _MAX_ registros en total)",
+                "sInfoPostFix":    "",
+                "sInfoThousands":  ",",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing":     "Procesando...",
+                "sSearch":         "Buscar:",
+                "sZeroRecords":    "No se encontraron resultados",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": activar para Ordenar Ascendentemente",
+                    "sSortDescending": ": activar para Ordendar Descendentemente"
+                }
+            }
+        });
         cargarModulo();
         cargaGrado();
+        consultarFolio(0);
+        consultarRegistros(0);
     });
+
+    function consultarRegistros(cve_registro){
+        $.ajax({
+            url      : 'Registro/consultarRegistro',
+            type     : "POST",
+            data    : { 
+                ban: 1,
+                cve_registro: cve_registro
+            },
+            success  : function(datos) {
+
+                var myJson = JSON.parse(datos);
+
+                tableComanda.clear().draw();
+
+                if(myJson.arrayDatos.length > 0)
+                {
+
+                    var title;
+                    var icon;
+                    var color_icon;
+                    var accion;
+
+                    $(myJson.arrayDatos).each( function(key, val)
+                    {
+
+                       
+                            title = 'Producto activo';
+                            icon = 'fa fa-minus-circle';
+                            color_icon = "color: #d12929;"
+                            accion = "eliminarFolioRegistro('" +val.cve_registro+"')";
+                        
+
+                        var btn_eliminar = "<i class='" + icon + "' style='font-size:14px; " + color_icon + " cursor: pointer;' title='" + title + "' onclick=\"" + accion + "\"></i>";
+                        var btn_editar = "<i class='fa fa-edit' style='font-size:18px; cursor: pointer;' title='Editar usuario' onclick=\"mostrarRegistro('" + val.cve_modulo + "','"+val.cve_submodulo+ "','"+val.cveaprendizaje_registro+ "','"+val.cve_medida+ "','"+val.cve_grado+ "','"+val.cve_alumno+ "','"+val.folio_registro+ "')\"></i>";
+                        
+                        tableComanda.row.add([
+                            val.folio_registro,
+                            val.nombre_completo,
+                            val.nombre_grado,
+                            val.nombre_aprendizaje,
+                            val.nombre_medida,
+                            val.fechaalta_registro,
+                            btn_editar,
+                            btn_eliminar
+                        ]).draw();
+                    })
+
+                }
+                else
+                {
+                    tableComanda = $('#gridComanda').DataTable();
+                    
+                }
+
+            }
+        });
+    }
+
+    function mostrarRegistro(cve_modulo,cve_submodulo,cveaprendizaje_registro,cve_medida,cve_grado,cve_alumno ,folio_registro){
+        $('#cmbModuloAprendizaje').val(cve_modulo);
+        $.ajax({
+            url      : 'Submodulo/consultar',
+            type     : "POST",
+            data    : { 
+                ban: 4,
+                cvemodulo: cve_modulo
+            },
+            beforeSend: function() {
+                // setting a timeout
+
+            },
+            success  : function(datos) {
+
+                var myJson = JSON.parse(datos);
+
+                select = $("#cmbSubmoduloAprendizaje");
+                select.attr('disabled',false);
+                select.find('option').remove();
+                select.append('<option value="-1">-- Selecciona --</option>');
+
+                if(myJson.arrayDatos.length > 0)
+                {
+                    $(myJson.arrayDatos).each( function(key, val)
+                    {
+                        select.append('<option value="' + val.cve_submodulo + '">' + val.nombre_submodulo + '</option>');
+                    });
+                    
+                    $('#cmbSubmoduloAprendizaje').val(cve_submodulo);
+                    
+                    $.ajax({
+                        url      : 'Aprendizaje/consultar',
+                        type     : "POST",
+                        data    : { 
+                            ban: 4,
+                            cve_aprendizaje: cve_submodulo
+                        },
+                        beforeSend: function() {
+                            // setting a timeout
+
+                        },
+                        success  : function(datos) {
+                            var nombre = '';
+                            var myJson = JSON.parse(datos);
+
+                            select = $("#cmbAprendizajesListMod");
+                            select.attr('disabled',false);
+                            select.find('option').remove();
+
+                            if(myJson.arrayDatos.length > 0)
+                            {
+                                
+                                $(myJson.arrayDatos).each( function(key, val)
+                                {
+                                    if(val.cve_aprendizaje != null){
+
+                                        if(cveaprendizaje_registro == val.cve_aprendizaje){
+                                            nombre = val.nombre_aprendizaje;
+                                        }
+                                    
+                                        value = '{"cve_aprendizaje":"'+val.cve_aprendizaje+'","nombre_aprendizaje":"'+val.nombre_aprendizaje.replace(/"/g, "\\&#x22;").replace(/'/g, "&#x27;")+'"}';
+                                        select.append("<option data-value='"+value+"' value='"+val.nombre_aprendizaje.replace(/'/g, "&#x27;")+"'>");
+                                    }
+                                });
+                                
+                                $('#cmbAprendizaje').val(nombre);
+                                var val = $('#cmbAprendizaje').val() ? $('#cmbAprendizaje').val() : '';
+                                // se agrego indexOf para saber si el string val viene con comillas o apostrofe y formar bien la cadena
+                                if(val.indexOf("\"") !== -1){
+                                    var valueCombo = $("#cmbAprendizajesListMod").find("option[value='"+val+"']").data("value") ? $("#cmbAprendizajesListMod").find("option[value='"+val+"']").data("value") : "";
+                                }
+                                else{
+                                var valueCombo = $("#cmbAprendizajesListMod").find("option[value=\""+val+"\"]").data("value") ? $("#cmbAprendizajesListMod").find("option[value=\""+val+"\"]").data("value") : "";
+                                }
+                                if(valueCombo.cve_aprendizaje != null){
+                                    $("#textoAprendizaje").text(valueCombo.nombre_aprendizaje);
+                                    $( "#textoAprendizaje" ).addClass( "fa fa-star" );
+                                    $('#cblist').empty();
+                                    $.ajax({
+                                        url      : 'Medida/consultar',
+                                        type     : "POST",
+                                        data    : { 
+                                            ban: 1
+                                        },
+                                        success  : function(datos) {
+                                            var myJson = JSON.parse(datos);
+                                            if(myJson.arrayDatos.length > 0)
+                                            {
+                                                $(myJson.arrayDatos).each( function(key, val)
+                                                {
+                                                    var container = $('#cblist');
+                                                    $('<input />', { type: 'checkbox', name: 'group1', id: val.cve_medida, value: val.nombre_medida, onclick: "onlyOne(this)" }).appendTo(container);
+                                                    $('<label />', { 'for': 'cb'+val.cve_medida, text: val.nombre_medida }).appendTo(container);
+                                                    $('<h3 />').appendTo(container);
+
+                                                    if(cve_medida == val.cve_medida ){
+                                                        $("#"+val.cve_medida).prop('checked', true);
+                                                    }
+
+                                                });
+                                            }
+
+                                        }
+                                    });
+                                    
+                                }
+                                
+
+                            }
+
+                        }
+                    });
+
+                    $('#cmbGrado').val(cve_grado);
+                    $.ajax({
+                        url      : 'Alumno/consultar',
+                        type     : "POST",
+                        data    : { 
+                            ban: 4,
+                            cve_alumno: $('#cmbGrado').val()
+                        },
+                        beforeSend: function() {
+                            // setting a timeout
+
+                        },
+                        success  : function(datos) {
+
+                            var myJson = JSON.parse(datos);
+
+                            select = $("#cmbAlumno");
+                            select.attr('disabled',false);
+                            select.find('option').remove();
+                            select.append('<option value="-1">-- Selecciona --</option>');
+
+                            if(myJson.arrayDatos.length > 0)
+                            {
+                                $(myJson.arrayDatos).each( function(key, val)
+                                {
+                                    select.append('<option value="' + val.cve_alumno + '">' + val.nombre_alumno +" "+ val.apep_alumno+" "+ val.apem_alumno + '</option>');
+                                });
+
+                                $('#cmbAlumno').val(cve_alumno);
+                                
+                            }
+
+                            $("#textoAlumno").text('Nombre alumno: '+$("#cmbAlumno option:selected").text());
+                            $("#textoGrado").text('Grado: '+$("#cmbGrado option:selected").text());
+                            consultarFolio(folio_registro);
+                        }
+                    });
+
+                }
+
+            }
+        });
+    }
+
+    function consultarFolio(folio){
+        $.ajax({
+            url      : 'Registro/consultarFolio',
+            type     : "POST",
+            data    : { 
+                ban: 1,
+                folio_folio : folio
+            },
+            success  : function(datos) {
+
+                var myJson = JSON.parse(datos);
+
+                    
+                $("#txtFolioVenta").text(myJson.arrayDatos[0].folio_folio);
+                if(myJson.arrayDatos[0].estatus_folio == "0" ){
+                            $("#txtNumeroRegistros").text('0');
+                        }
+                        else{
+                $("#txtNumeroRegistros").text(myJson.arrayDatos[0].numero_registro);
+
+                        }
+
+            }
+        });
+    }
+
+    function cargarTablaDetallePaquete(folio)
+    {
+        $.ajax({
+            url      : 'Registro/consultarFolio',
+            type     : "POST",
+            data    : { 
+                ban: 2,
+                cve_folio : folio
+            },
+            success  : function(datos) {
+
+                var myJson = JSON.parse(datos);
+
+                tableDetallePaquete.clear().draw();
+
+                if(myJson.arrayDatos.length > 0)
+                {
+
+                    var title;
+                    var icon;
+                    var color_icon;
+                    var accion;
+
+                    $(myJson.arrayDatos).each( function(key, val)
+                    {
+
+                       
+                            title = 'Producto activo';
+                            icon = 'fa fa-plus-circle';
+                            color_icon = "color: #367fa9;"
+                            accion = "agregarFolioRegistro('" + val.folio_folio + "')";
+                        
+
+                        var btn_eliminar = "<i class='" + icon + "' style='font-size:14px; " + color_icon + " cursor: pointer;' title='" + title + "' onclick=\"" + accion + "\"></i>";
+                        tableDetallePaquete.row.add([
+                            val.folio_folio,
+                            val.numero_registro,
+                            val.fechaalta_folio,
+                            btn_eliminar,
+                        ]).draw();
+                    })
+
+                }
+                else
+                {
+                    tableDetallePaquete = $('#gridDetallePaquete').DataTable();
+                    
+                }
+
+            }
+        });
+    }
+
+    function agregarFolioRegistro(folio){
+
+        consultarFolio(folio);
+        $('#modal_formTradicional').modal('hide');
+
+    }
 
     function GenerarFolio(){
         
@@ -167,6 +607,10 @@
 
                     
                         $("#txtFolioVenta").text(myJson.arrayDatos[0].folio_folio);
+                        if(myJson.arrayDatos[0].estatus_folio == "0" ){
+                            $("#txtNumeroRegistros").text('0');
+                        }
+                        
                         
                   
                 }
@@ -198,9 +642,36 @@
                 cve_medida: favorite.join(", ")
             },
             success  : function(datos) {
-                
+                var myJson = JSON.parse(datos);
+                    
+                if(myJson.status == "success")
+                {
+
+                    msgAlert2(myJson.msg ,"info");
+                    setTimeout(function() { $("#msgAlert2").fadeOut(1500); },3000);
+                    consultarFolio($("#txtFolioVenta").text());
+                    $("#cmbAprendizaje").val('');
+                    $("#textoAprendizaje").text('');
+                    $( "#textoAprendizaje" ).removeClass( "fa fa-star" );
+                    $('#cblist').empty();
+                    consultarRegistros(0);
+
+                }
+                else {
+                    msgAlert2(myJson.msg ,"warning");
+                    setTimeout(function() { $("#msgAlert2").fadeOut(1500); },3000);
+                }
             }
         });
+        return false;
+    });
+
+    $('#btnMostraModalTradicional').click(function (e) {
+        $('#modal_formTradicional').modal({
+            keyboard: false
+        });
+        cargarTablaDetallePaquete(0);
+        $("#btnGuardar").html('Guardar');
         return false;
     });
     
@@ -449,6 +920,13 @@
     function mostrarAlumno(){
         $("#textoAlumno").text('Nombre alumno: '+$("#cmbAlumno option:selected").text());
         $("#textoGrado").text('Grado: '+$("#cmbGrado option:selected").text());
+    }
+
+    function msgAlert2(msg,tipo)
+    {
+        $('#msgAlert2').css("display", "block");
+        $("#msgAlert2").html("<div class='alert alert-" + tipo + "' role='alert'>" + msg + " <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button> </div>");
+        setTimeout(function() { $("#msgAlert2").fadeOut(1500); },1500);
     }
     
 </script>

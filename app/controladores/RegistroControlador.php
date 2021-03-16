@@ -27,6 +27,20 @@ else
 			$this->vista('registro/Registro');
 		}
 
+		public function consultarFolio()
+		{
+			$data = $this->registroModelo->consultarFolio($_POST);
+			$envioDatos["arrayDatos"] = $data;
+			echo json_encode($envioDatos);
+		}
+
+		public function consultarRegistro()
+		{
+			$data = $this->registroModelo->consultarRegistro($_POST);
+			$envioDatos["arrayDatos"] = $data;
+			echo json_encode($envioDatos);
+		}
+
 		public function guardarRegistro()
 		{
 			$datosCompletos = $this->validarDatosVaciosRegistroGuardar($_POST);
@@ -89,6 +103,7 @@ else
 			if(empty($dataPost["cve_alumno"]) || !trim($dataPost["cve_alumno"])){ $status = "vacio"; }
 			else if(empty($dataPost["cve_aprendizaje"]) || !trim($dataPost["cve_aprendizaje"])){ $status = "vacio"; }
 			else if(empty($dataPost["cve_medida"]) || !trim($dataPost["cve_medida"])){ $status = "vacio"; }
+			else if(empty($dataPost["folio_folio"]) || !trim($dataPost["folio_folio"])){ $status = "vacio"; }
 			else{
 				$status = "completo";
 			}
