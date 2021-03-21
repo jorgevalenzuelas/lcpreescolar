@@ -51,23 +51,25 @@
         <section class="content">
             
                 <!-- /.box-header -->
+            <div class="box" style="margin-top: 20px;">
+                <!-- /.box-header -->
                 <div class="box-body">
-                <br>
-                <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
-                        <thead>
-                            <tr>
-                                <th>Folio</th>
-                                <th>Nombre alumno</th>
-                                <th>Grado</th>
-                                <th>Aprendizaje</th>
-                                <th>Medida</th>
-                                <th>Fecha alta</th>
-                                <th>Grafica</th>
-                            </tr>
-                        </thead>
-                        
+                    <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Nombre alumno</th>
+                                    <th>Grado</th>
+                                    <th>Aprendizaje</th>
+                                    <th>Medida</th>
+                                    <th>Fecha alta</th>
+                                    <th>Grafica</th>
+                                </tr>
+                            </thead>
+                            
                     </table>
                 </div>
+            </div>
 
                 <div id="pieChartContent">
                 <canvas id="pieChart" style="max-width: 500px;"></canvas>

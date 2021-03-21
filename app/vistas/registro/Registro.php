@@ -107,8 +107,9 @@
                 </div>
             </div>
                 <!-- /.box-header -->
+            <div class="box" style="margin-top: 20px;">
+                <!-- /.box-header -->
                 <div class="box-body">
-                <br>
                     <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
                         <thead>
                             <tr>
@@ -125,6 +126,7 @@
                         
                     </table>
                 </div>
+            </div>
 
             
         
