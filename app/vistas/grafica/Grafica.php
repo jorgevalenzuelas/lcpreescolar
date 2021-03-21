@@ -274,12 +274,16 @@
                         'rgba(246, 3, 3, 0.5)',
                         'rgba(246, 221, 3, 0.5)',
                         'rgba(3, 104, 246, 0.5)',
-                        'rgba(3, 246, 60, 0.5)'
+                        'rgba(3, 246, 60, 0.5)',
+                        'rgba(3, 246, 60, 0)'
                         ];
                 semanas.splice(0,semanas.length);
                 semanasValores.splice(0,semanasValores.length);
                 semanasColores.splice(0,semanasColores.length);
                 
+                semanas.push("");
+                semanasValores.push("0");
+                semanasColores.push(colores[4]);
                 $(myJson.arrayDatos).each( function(key, val)
                 {
                     semanas.push(val.fechaalta_registro);
@@ -301,7 +305,8 @@
                 });
 
                 semanas.push("");
-                semanasValores.push("0");
+                semanasValores.push("100");
+                semanasColores.push(colores[4]);
                 var pieChartContent = document.getElementById('pieChartContent');
                 pieChartContent.innerHTML = '&nbsp;';
                 $('#pieChartContent').append('<canvas id="pieChart" style="max-width: 500px;"><canvas>');
