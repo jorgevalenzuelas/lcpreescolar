@@ -53,11 +53,14 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                 <br>
-                    <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
+                <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
                         <thead>
                             <tr>
                                 <th>Folio</th>
-                                <th>Numero registros</th>
+                                <th>Nombre alumno</th>
+                                <th>Grado</th>
+                                <th>Aprendizaje</th>
+                                <th>Medida</th>
                                 <th>Fecha alta</th>
                                 <th>Grafica</th>
                             </tr>
@@ -66,9 +69,9 @@
                     </table>
                 </div>
 
-
-                <canvas id="myChart" style="max-width: 500px;"></canvas>
-					
+                <div id="pieChartContent">
+                <canvas id="pieChart" style="max-width: 500px;"></canvas>
+                </div>
 
             
         
@@ -165,7 +168,7 @@
             "info"      : true,
             "bLengthChange": true,
             "columnDefs": [
-                {"width": "10%","className": "text-center","targets": 3},
+                {"width": "10%","className": "text-center","targets": 6},
             ],
 
             "bJQueryUI":true,"oLanguage": {
@@ -194,70 +197,6 @@
         });
         consultarRegistros(0);
 
-        var ctx = document.getElementById("myChart").getContext('2d');
-        var semanas = ["Semana 1", "Semana 2", "Semana 3", "Semana 4",""];
-        var semanasValores = [50, 50, 75, 100,0];
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-            labels: semanas,
-            datasets: [{
-                label: '# of Votes',
-                data: semanasValores,
-                backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                ],
-                borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)'
-                ],
-                borderWidth: 1
-            }]
-            },
-            options: {
-                tooltips: {
-        enabled: true,
-        mode: 'single',
-        callbacks: {
-            title: function (tooltipItem, data) { 
-                return data.labels[tooltipItem[0].index]; 
-            },
-            label: function(tooltipItems, data) {
-                if(tooltipItems.yLabel == 25){
-                    return "NI INSUFICIENTE";
-                }
-                if(tooltipItems.yLabel == 50){
-                    return "NII BÁSICO";
-                }
-                if(tooltipItems.yLabel == 75){
-                    return "NIII SATISFACTORIO";
-                }
-                if(tooltipItems.yLabel == 100){
-                    return "NIV SOBRESALIENTE";
-                }
-                
-            },
-            //footer: function (tooltipItem, data) { return "..."; }
-        }
-    },
-                legend: {
-          display: false
-        },
-            scales: {
-                yAxes: [{
-                ticks: {
-                    display: false
-                }
-                }]
-            }
-            }
-        });
-        
     });
 
     function consultarRegistros(cve_registro){
@@ -286,12 +225,16 @@
                     {
 
                        
-                        
-                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Editar usuario' onclick=\"mostrarRegistro('" + val.cve_folio + "')\"></i>";
+                            
+
+                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Grafica alumno' onclick=\"mostrarRegistroIndividual('" + val.folio_registro + "','"+val.cve_alumno+ "','"+val.cveaprendizaje_registro+ "')\"></i>";
                         
                         tableComanda.row.add([
-                            val.folio_folio,
-                            val.numero_registros,
+                            val.folio_registro,
+                            val.nombre_completo,
+                            val.nombre_grado,
+                            val.nombre_aprendizaje,
+                            val.nombre_medida,
                             val.fechaalta_registro,
                             btn_editar
                         ]).draw();
@@ -304,6 +247,114 @@
                     
                 }
 
+            }
+        });
+    }
+
+    function mostrarRegistroIndividual(folio_registro,cve_alumno,cveaprendizaje_registro){
+        
+        $.ajax({
+            url      : 'Grafica/consultarIndividual',
+            type     : "POST",
+            data    : { 
+                ban: 1,
+                folio_registro: folio_registro,
+                cve_alumno: cve_alumno,
+                cveaprendizaje_registro: cveaprendizaje_registro
+            },
+            success  : function(datos) {
+
+                var myJson = JSON.parse(datos);
+                var semanas = [];
+                var semanasValores = [];
+                var semanasColores = [];
+                var colores = [
+                        'rgba(246, 3, 3, 0.5)',
+                        'rgba(246, 221, 3, 0.5)',
+                        'rgba(3, 104, 246, 0.5)',
+                        'rgba(3, 246, 60, 0.5)'
+                        ];
+                semanas.splice(0,semanas.length);
+                semanasValores.splice(0,semanasValores.length);
+                semanasColores.splice(0,semanasColores.length);
+                
+                $(myJson.arrayDatos).each( function(key, val)
+                {
+                    semanas.push(val.fechaalta_registro);
+                    semanasValores.push(val.valor_medida);
+                    if(val.valor_medida == 25){
+                        semanasColores.push(colores[0]);
+                    }
+                    if(val.valor_medida == 50){
+                        semanasColores.push(colores[1]);
+                    }
+                    if(val.valor_medida == 75){
+                        semanasColores.push(colores[2]);
+                    }
+                    if(val.valor_medida == 100){
+                        semanasColores.push(colores[3]);
+                    }
+                    
+
+                });
+
+                semanas.push("");
+                semanasValores.push("0");
+                var pieChartContent = document.getElementById('pieChartContent');
+                pieChartContent.innerHTML = '&nbsp;';
+                $('#pieChartContent').append('<canvas id="pieChart" style="max-width: 500px;"><canvas>');
+
+                ctx = $("#pieChart").get(0).getContext("2d"); 
+                var myPieChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                    labels: semanas,
+                    datasets: [{
+                        label: '# of Votes',
+                        data: semanasValores,
+                        backgroundColor: semanasColores,
+                        borderColor: semanasColores,
+                        borderWidth: 1
+                    }]
+                    },
+                    options: {
+                        tooltips: {
+                            enabled: true,
+                            mode: 'single',
+                            callbacks: {
+                                title: function (tooltipItem, data) { 
+                                    return data.labels[tooltipItem[0].index]; 
+                                },
+                                label: function(tooltipItems, data) {
+                                    if(tooltipItems.yLabel == 25){
+                                        return "NI INSUFICIENTE";
+                                    }
+                                    if(tooltipItems.yLabel == 50){
+                                        return "NII BÁSICO";
+                                    }
+                                    if(tooltipItems.yLabel == 75){
+                                        return "NIII SATISFACTORIO";
+                                    }
+                                    if(tooltipItems.yLabel == 100){
+                                        return "NIV SOBRESALIENTE";
+                                    }
+                                    
+                                },
+                                //footer: function (tooltipItem, data) { return "..."; }
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                            ticks: {
+                                display: false
+                            }
+                            }]
+                        }
+                    }
+                });
             }
         });
     }
