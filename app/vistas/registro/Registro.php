@@ -107,7 +107,7 @@
                 </div>
             </div>
                 <!-- /.box-header -->
-            <div class="box" style="margin-top: 20px;">
+            <div class="box" style="overflow-x:auto;">
                 <!-- /.box-header -->
                 <div class="box-body">
                     <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
