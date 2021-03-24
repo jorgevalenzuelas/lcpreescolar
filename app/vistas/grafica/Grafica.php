@@ -49,34 +49,34 @@
         </section>
         <!-- Main content -->
         <section class="content">
-            
-                <!-- /.box-header -->
-            <div class="box" style="overflow-x:auto;">
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
-                            <thead>
-                                <tr>
-                                    <th>Folio</th>
-                                    <th>Nombre alumno</th>
-                                    <th>Grado</th>
-                                    <th>Aprendizaje</th>
-                                    <th>Medida</th>
-                                    <th>Fecha alta</th>
-                                    <th>Grafica</th>
-                                </tr>
-                            </thead>
-                            
-                    </table>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <div class="box" style="overflow-x:auto;">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="gridComanda" class="table table-bordered table-striped" style="font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th>Folio</th>
+                                        <th>Nombre alumno</th>
+                                        <th>Grado</th>
+                                        <th>Aprendizaje</th>
+                                        <th>Medida</th>
+                                        <th>Fecha alta</th>
+                                        <th>Grafica</th>
+                                    </tr>
+                                </thead>
+                                
+                        </table>
+                    </div>
                 </div>
             </div>
-
+            <div class="form-group col-md-6">
                 <div id="pieChartContent">
-                <canvas id="pieChart" style="max-width: 500px;"></canvas>
                 </div>
-
-            
-        
+            </div>
+        </div>
             <!-- /.box -->
         </section>
         <!-- /.content -->
@@ -229,7 +229,7 @@
                        
                             
 
-                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Grafica alumno' onclick=\"mostrarRegistroIndividual('" + val.folio_registro + "','"+val.cve_alumno+ "','"+val.cveaprendizaje_registro+ "')\"></i>";
+                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Grafica alumno' onclick=\"mostrarRegistroIndividual('" + val.folio_registro + "','"+val.cve_alumno+ "','"+val.cveaprendizaje_registro+ "','"+val.nombre_completo+ "','"+val.nombre_grado+ "','"+val.nombre_aprendizaje+ "')\"></i>";
                         
                         tableComanda.row.add([
                             val.folio_registro,
@@ -253,7 +253,7 @@
         });
     }
 
-    function mostrarRegistroIndividual(folio_registro,cve_alumno,cveaprendizaje_registro){
+    function mostrarRegistroIndividual(folio_registro,cve_alumno,cveaprendizaje_registro,nombre_completo,nombre_grado,nombre_aprendizaje){
         
         $.ajax({
             url      : 'Grafica/consultarIndividual',
@@ -310,6 +310,12 @@
                 var pieChartContent = document.getElementById('pieChartContent');
                 pieChartContent.innerHTML = '&nbsp;';
                 $('#pieChartContent').append('<canvas id="pieChart" style="max-width: 500px;"><canvas>');
+                $('#pieChartContent').append('<h4 id="textoFolio">Folio: '+folio_registro+'</h4>');
+                $('#pieChartContent').append('<h4 id="textoAlumno">Nombre: '+nombre_completo+'</h4>');
+                $('#pieChartContent').append('<h4 id="textoGrado">Grado: '+nombre_grado+'</h4>');
+                $('#pieChartContent').append('<h4 id="textoAprendizaje">Aprendizaje: '+nombre_aprendizaje+'</h4>');
+
+                
 
                 ctx = $("#pieChart").get(0).getContext("2d"); 
                 var myPieChart = new Chart(ctx, {
