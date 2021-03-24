@@ -288,16 +288,16 @@
                 {
                     semanas.push(val.fechaalta_registro);
                     semanasValores.push(val.valor_medida);
-                    if(val.valor_medida == 25){
+                    if(val.valor_medida == 1){
                         semanasColores.push(colores[0]);
                     }
-                    if(val.valor_medida == 50){
+                    if(val.valor_medida == 2){
                         semanasColores.push(colores[1]);
                     }
-                    if(val.valor_medida == 75){
+                    if(val.valor_medida == 3){
                         semanasColores.push(colores[2]);
                     }
-                    if(val.valor_medida == 100){
+                    if(val.valor_medida == 4){
                         semanasColores.push(colores[3]);
                     }
                     
@@ -305,7 +305,7 @@
                 });
 
                 semanas.push("");
-                semanasValores.push("100");
+                semanasValores.push("4");
                 semanasColores.push(colores[4]);
                 var pieChartContent = document.getElementById('pieChartContent');
                 pieChartContent.innerHTML = '&nbsp;';
@@ -339,16 +339,16 @@
                                     return data.labels[tooltipItem[0].index]; 
                                 },
                                 label: function(tooltipItems, data) {
-                                    if(tooltipItems.yLabel == 25){
+                                    if(tooltipItems.yLabel == 1){
                                         return "NI INSUFICIENTE";
                                     }
-                                    if(tooltipItems.yLabel == 50){
+                                    if(tooltipItems.yLabel == 2){
                                         return "NII BÁSICO";
                                     }
-                                    if(tooltipItems.yLabel == 75){
+                                    if(tooltipItems.yLabel == 3){
                                         return "NIII SATISFACTORIO";
                                     }
-                                    if(tooltipItems.yLabel == 100){
+                                    if(tooltipItems.yLabel == 4){
                                         return "NIV SOBRESALIENTE";
                                     }
                                     
@@ -361,10 +361,36 @@
                         },
                         scales: {
                             yAxes: [{
-                            ticks: {
-                                display: false
-                            }
-                            }]
+                                ticks: {
+                                    beginAtZero:false
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Medida'
+                                },
+                                afterTickToLabelConversion : function(q){
+                                    for(var tick in q.ticks){
+                                        
+                                        if(q.ticks[tick] == 1){
+                                            q.ticks[tick] =  "NI INSUFICIENTE";
+                                        }
+                                        if(q.ticks[tick] == 2){
+                                            q.ticks[tick] =  "NII BÁSICO";
+                                        }
+                                        if(q.ticks[tick] == 3){
+                                            q.ticks[tick] =  "NIII SATISFACTORIO";
+                                        }
+                                        if(q.ticks[tick] == 4){
+                                            q.ticks[tick] =  "NIV SOBRESALIENTE";
+                                        }
+
+                                        if(q.ticks[tick] == '0.5' || q.ticks[tick] == '1.5' || q.ticks[tick] == '2.5' || q.ticks[tick] == '3.5'){
+                                            q.ticks[tick] =  "";
+                                        }
+                                        
+                                    }
+                                }
+                                }]
                         }
                     }
                 });

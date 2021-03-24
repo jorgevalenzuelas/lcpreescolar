@@ -172,8 +172,6 @@
                 </div>
             </div>
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
-                <button class="btn btn-primary" id="btnCancelar">Cancelar</button>
             </div>
         </div>
     </div>
