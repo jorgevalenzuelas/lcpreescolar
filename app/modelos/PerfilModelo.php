@@ -38,7 +38,7 @@ class PerfilModelo
         $datosFiltrados = $this->filtrarDatos($datosPerfil);
         $cvePerfil = $datosFiltrados['cvePerfil'];
 
-        $query = "CALL obten_opcionesperfil('3','','')";
+        $query = "CALL obten_opcionesperfil('3','0','0')";
 
         $c_opcionMenu = $this->conexion->query($query);
         $r_opcionMenu = $this->conexion->consulta_array($c_opcionMenu);
@@ -116,8 +116,10 @@ class PerfilModelo
         foreach ($datosFiltrados as $valor) 
         {
 
+
+            
             if (!empty($valor)){
-                $query = "CALL guardarPerfil('2','$ultima_cve','','','$valor','')";
+                $query = "CALL guardarPerfil('2','$ultima_cve','0','0','$valor','0')";
                 $respuesta = $this->conexion->query($query) or die ($this->conexion->error());
             }
 

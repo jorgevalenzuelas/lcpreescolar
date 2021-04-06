@@ -229,7 +229,7 @@
                        
                             
 
-                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Grafica alumno' onclick=\"mostrarRegistroIndividual('" + val.folio_registro + "','"+val.cve_alumno+ "','"+val.cveaprendizaje_registro+ "','"+val.nombre_completo+ "','"+val.nombre_grado+ "','"+val.nombre_aprendizaje+ "')\"></i>";
+                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Grafica alumno' onclick=\"mostrarRegistroIndividual('" + val.folio_registro + "','"+val.cve_alumno+ "','"+val.cveaprendizaje_registro+ "','"+val.nombre_completo+ "','"+val.nombre_grado+ "','"+val.nombre_aprendizaje+"')\"></i>";
                         
                         tableComanda.row.add([
                             val.folio_registro,
@@ -314,8 +314,12 @@
                 $('#pieChartContent').append('<h4 id="textoAlumno">Nombre: '+nombre_completo+'</h4>');
                 $('#pieChartContent').append('<h4 id="textoGrado">Grado: '+nombre_grado+'</h4>');
                 $('#pieChartContent').append('<h4 id="textoAprendizaje">Aprendizaje: '+nombre_aprendizaje+'</h4>');
-
-                
+                $('#pieChartContent').append('<h4 id="textoComentario"><b>Comentario:</b></h4>');
+                /*if(comentario_folio == 'undefined' || comentario_folio == ''){
+                    comentario_folio = '';
+                }*/
+                //$('#pieChartContent').append('<textarea id="Comentario" style="overflow:auto;resize:none" rows="4" cols="70">'+comentario_folio+'</textarea>');
+                $('#pieChartContent').append('<div class="row ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary" class="btn btn-primary" id="btnGuardarComentarrio">Guardar</button></div>');
 
                 ctx = $("#pieChart").get(0).getContext("2d"); 
                 var myPieChart = new Chart(ctx, {
