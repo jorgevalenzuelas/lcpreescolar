@@ -229,7 +229,7 @@
                        
                             
 
-                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Grafica alumno' onclick=\"mostrarRegistroIndividual('" + val.folio_registro + "','"+val.cve_alumno+ "','"+val.cveaprendizaje_registro+ "','"+val.nombre_completo+ "','"+val.nombre_grado+ "','"+val.nombre_aprendizaje+"')\"></i>";
+                        var btn_editar = "<i class='fa fa-bar-chart' style='font-size:18px; cursor: pointer;' title='Grafica alumno' onclick=\"mostrarRegistroIndividual('" + val.folio_registro + "','"+val.cve_alumno+ "','"+val.cveaprendizaje_registro+ "','"+val.nombre_completo+ "','"+val.nombre_grado+ "','"+val.nombre_aprendizaje+ "')\"></i>";
                         
                         tableComanda.row.add([
                             val.folio_registro,
@@ -284,8 +284,12 @@
                 semanas.push("");
                 semanasValores.push("0");
                 semanasColores.push(colores[4]);
+                cvecomentario = '';
+                comentario = '';
                 $(myJson.arrayDatos).each( function(key, val)
                 {
+                    comentario = val.comentario_comentario;
+                    cvecomentario = val.cve_comentario;
                     semanas.push(val.fechaalta_registro);
                     semanasValores.push(val.valor_medida);
                     if(val.valor_medida == 1){
@@ -315,11 +319,13 @@
                 $('#pieChartContent').append('<h4 id="textoGrado">Grado: '+nombre_grado+'</h4>');
                 $('#pieChartContent').append('<h4 id="textoAprendizaje">Aprendizaje: '+nombre_aprendizaje+'</h4>');
                 $('#pieChartContent').append('<h4 id="textoComentario"><b>Comentario:</b></h4>');
-                /*if(comentario_folio == 'undefined' || comentario_folio == ''){
-                    comentario_folio = '';
-                }*/
-                //$('#pieChartContent').append('<textarea id="Comentario" style="overflow:auto;resize:none" rows="4" cols="70">'+comentario_folio+'</textarea>');
-                $('#pieChartContent').append('<div class="row ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary" class="btn btn-primary" id="btnGuardarComentarrio">Guardar</button></div>');
+                if(comentario == null || comentario == ''){
+                    comentario = '';
+                }
+                
+                $('#pieChartContent').append('<div class="row">  <div class="form-group col-md-12"> <div id="msgAlert2"></div> </div> </div>');
+                $('#pieChartContent').append('<textarea id="Comentario" style="overflow:auto;resize:none" rows="4" cols="70">'+comentario+'</textarea>');
+                $('#pieChartContent').append('<div class="row ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary" class="btn btn-primary" onclick="btnGuardarComentario('+cvecomentario+','+folio_registro+','+cve_alumno+','+cveaprendizaje_registro+')">Guardar</button></div>');
 
                 ctx = $("#pieChart").get(0).getContext("2d"); 
                 var myPieChart = new Chart(ctx, {
@@ -400,6 +406,34 @@
                 });
             }
         });
+    }
+
+    function btnGuardarComentario(cvecomentario,folio_registro,cve_alumno,cveaprendizaje_registro){
+        
+        $.ajax({
+                url      : 'Grafica/guardarComentario',
+                data     : {
+                    ban : 1,
+                    folio_registro : folio_registro,
+                    cve_alumno  :cve_alumno,
+                    cveaprendizaje_registro  : cveaprendizaje_registro,
+                    cvecomentario : cvecomentario != '' ? cvecomentario : '0',
+                    comentario : $('#Comentario').val() != '' ? $('#Comentario').val() : ''
+                },
+                type: "POST",
+                success: function(datos){
+                    var myJson = JSON.parse(datos);
+                    if(myJson.status == "success")
+                    {
+                        msgAlert2(myJson.msg ,"success");
+                    }
+                    else
+                    {
+                        
+                        
+                    }
+                }
+            });
     }
 
     function msgAlert2(msg,tipo)

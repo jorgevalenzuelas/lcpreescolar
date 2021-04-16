@@ -27,6 +27,35 @@ class GraficaModelo
         return $r_grafica;
     }
 
+    public function guardarComentario($datosGrado)
+    {
+        $datosFiltrados = $this->filtrarDatos($datosGrado);
+
+        $ban                = $datosFiltrados['ban'];
+        $folio_registro                = $datosFiltrados['folio_registro'];
+        $cve_alumno    = $datosFiltrados['cve_alumno'];
+        $cveaprendizaje_registro = $datosFiltrados['cveaprendizaje_registro'];
+        $cvecomentario = $datosFiltrados['cvecomentario'];
+        $comentario = $datosFiltrados['comentario'];
+        $cve_usuario = $_SESSION["cve_usuario"];
+        $query = "CALL guardarComentario(
+                                            '$ban',
+                                            '$folio_registro',
+                                            '$cve_alumno',
+                                            '$cveaprendizaje_registro',
+                                            '$cvecomentario',
+                                            '$comentario',
+                                            '$cve_usuario'
+                                        )";
+
+        $respuesta = $this->conexion->query($query) or die ($this->conexion->error());
+        
+        $this->conexion->close_conexion();
+        
+        return $respuesta;
+
+    }
+
     public function filtrarDatos($datosFiltrar){
         foreach ($datosFiltrar as $indice => $valor) {
             $datosFiltrarr[$indice] = $this->conexion->real_escape_string($valor);
