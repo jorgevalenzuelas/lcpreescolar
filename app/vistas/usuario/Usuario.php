@@ -191,7 +191,7 @@
 
     $(document).ready(function () {
 
-        conn = new WebSocket('ws://178.128.149.94:8080');//conectara
+        conn = new WebSocket('ws://www.desoresbipreescolar.tk/:8080');//conectara
 
             conn.onopen = function(e) {
                 console.log("conexion exitosa!");
