@@ -191,7 +191,6 @@
 
     $(document).ready(function () {
 
-
         conn = new WebSocket('wss://www.desoresbipreescolar.tk');//conectara
 
             conn.onopen = function(e) {
