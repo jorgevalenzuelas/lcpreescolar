@@ -191,6 +191,19 @@
 
     $(document).ready(function () {
 
+        conn = new WebSocket('ws://localhost:8080');//conectara
+
+            conn.onopen = function(e) {
+                console.log("conexion exitosa!");
+            };
+
+            conn.onmessage = function(e) {
+                console.log(e.data);
+                var respuesta = JSON.parse(e.data);
+                console.log("nombre:" +respuesta.nombre+ " mensaje: "+respuesta.mensaje);
+                cargarTablaUsuario();
+            };
+
         //Cargamos combo Perfil
         $.ajax({
             url      : 'perfil/consultar',
@@ -471,7 +484,11 @@
                     
                     if(myJson.status == "success")
                     {
-                        
+                        //Reinicializamos tabla
+                        var nombre = 2;
+                        var mensaje = 1;
+                        var enviar = {'nombre': nombre, 'mensaje' : mensaje};
+                        conn.send(JSON.stringify(enviar));
                         //Reinicializamos tabla
                         cargarTablaUsuario();
 
