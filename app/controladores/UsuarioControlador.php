@@ -52,7 +52,7 @@ else
 			else
 			{
 				//Preparamos en un array los datos que enviaremos a la BD
-				$cve_usuario = (empty($cve_usuario)) ? $_POST["txtcveUsuario"] : 0 ;
+				$cve_usuario = (empty($_POST["txtcveUsuario"])) ? $_POST["txtcveUsuario"] : 0 ;
 
 				$datosUsuario =  array (
 									ban                 => 1,
