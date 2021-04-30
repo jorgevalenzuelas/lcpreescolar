@@ -191,7 +191,12 @@
 
     $(document).ready(function () {
 
+<<<<<<< HEAD
         conn = new WebSocket('wss://www.desoresbipreescolar.tk');//conectara
+=======
+
+        conn = new WebSocket('ws://www.desoresbipreescolar.tk');//conectara
+>>>>>>> parent of 317b023 (msj)
 
             conn.onopen = function(e) {
                 console.log("conexion exitosa!");
